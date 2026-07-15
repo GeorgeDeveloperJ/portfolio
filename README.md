@@ -1,5 +1,9 @@
 # 💻 Full-Stack Personal Portfolio
 
+> [!IMPORTANT]
+> **🚧 Work In Progress (Target Architecture)**
+> This repository is in the initial bootstrapping and development phase. The folder structure, AWS cloud infrastructure, and CI/CD pipelines described below represent the **target end-state architecture** of this project. Active features are being built incrementally.
+
 A professional, production-ready, full-stack personal portfolio application designed to showcase software engineering projects, skills, certifications, and professional achievements. 
 
 Built with a modern web architecture, this project features a containerized multi-tier setup, automated infrastructure provisioning, and robust CI/CD pipelines.
@@ -108,7 +112,7 @@ Ensure you have the following installed locally:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/georgesantanar/portfolio.git
+git clone https://github.com/GeorgeDeveloperJ/portfolio.git
 cd portfolio
 ```
 
@@ -189,8 +193,8 @@ The cloud environment is provisioned with high availability and security in mind
 *   **Name**: George A. Santana R.
 *   **Role**: DevOps & Full Stack Developer
 *   **Email**: [georgeasantanar@gmail.com](mailto:georgeasantanar@gmail.com)
-*   **GitHub**: [@georgedeveloperj](https://github.com/georgedeveloperj)
-*   **LinkedIn**: [George A. Santana R.](https://linkedin.com/in/ghttps://www.linkedin.com/in/georgedeveloperj)
+*   **GitHub**: [@GeorgeDeveloperJ](https://github.com/GeorgeDeveloperJ)
+*   **LinkedIn**: [George A. Santana R.](https://www.linkedin.com/in/georgedeveloperj)
 
 ---
 
