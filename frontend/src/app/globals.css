@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #09090b;
+  --foreground: #f4f4f5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-mono);
   --font-mono: var(--font-geist-mono);
+
+  --color-term-bg: #09090b;
+  --color-term-card-bg: #18181b;
+  --color-term-border: #27272a;
+  --color-term-accent: #22d3ee;
+  --color-term-green: #4ade80;
+  --color-term-amber: #fbbf24;
+  --color-term-red: #f87171;
+  --color-term-dim: #71717a;
+  
+  --animate-cursor-blink: cursor-blink 1s step-end infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes cursor-blink {
+  from, to { border-color: transparent }
+  50% { border-color: currentColor }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-mono), monospace;
+  overflow-x: hidden;
+}
+
+/* CRT Screen Effect overlay */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.15;
+  transform: translateZ(0);
+}
+
+/* Blocky terminal-like scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #18181b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border: 1px solid #3f3f46;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Custom terminal list utilities */
+.prompt-glow {
+  text-shadow: 0 0 5px rgba(34, 211, 238, 0.5);
+}
+
+.green-glow {
+  text-shadow: 0 0 5px rgba(74, 222, 128, 0.5);
 }
