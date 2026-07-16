@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Frontend
+
+Next.js 16 + React 19 client application for the full-stack portfolio project. Features a **dual-mode interface** — an interactive CLI terminal and a graphical dashboard — backed by a REST API with automatic offline fallback.
+
+## Architecture
+
+```
+src/
+├── app/                  # Next.js App Router (layout, page, global styles)
+├── components/
+│   ├── Terminal/         # CLI mode — interactive console with typed commands
+│   │   └── Console.tsx
+│   └── GUI/              # Dashboard mode — windowed cards (projects, skills, certs)
+│       └── GuiView.tsx
+├── hooks/
+│   └── useApi.ts         # Data fetching hook with 3s timeout + fallback logic
+├── lib/
+│   └── fallbackData.ts   # Static offline cache data and shared TypeScript interfaces
+└── __tests__/            # Jest + Testing Library unit tests
+    ├── Console.test.tsx
+    └── useApi.test.ts
+```
+
+## Dual-Mode Interface
+
+| Mode | Component | Description |
+|------|-----------|-------------|
+| **Terminal (CLI)** | `Console.tsx` | Default view. Type commands (`help`, `whoami`, `projects`, `skills`, `certs`, `contact`, `gui`, `clear`) to navigate. Supports arrow-key command history and Tab completion. |
+| **GUI (Dashboard)** | `GuiView.tsx` | Visual card-based layout with framer-motion animations. Switch from the terminal with the `gui` command. |
+
+## API Integration & Offline Fallback
+
+The `usePortfolioData` hook (`src/hooks/useApi.ts`) fetches projects, skills, and certifications from the backend API in parallel:
+
+- **Timeout**: 3-second `AbortController` timeout per request.
+- **Fallback**: If any request fails or times out, the hook loads static data from `fallbackData.ts` and sets `isFallback = true`.
+- **Terminal logs**: The hook emits `[INFO]`, `[SUCCESS]`, `[ERROR]`, and `[WARN]` log messages that the Console component displays in real time.
+
+The API base URL is configured via the `NEXT_PUBLIC_API_URL` environment variable (defaults to `http://localhost:5000/api`).
+
+## Tech Stack
+
+- **Next.js 16** (App Router) + **React 19**
+- **TypeScript 5**
+- **Tailwind CSS 4** (via `@tailwindcss/postcss`)
+- **framer-motion** — animations for GUI mode
+- **lucide-react** — icons for GUI mode
+- **Jest 29** + **@testing-library/react** — testing
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js v20.x or higher
+- Backend API running (see [`../backend/README.md`](../README.md) or root `README.md`)
+
+### Local Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Start the dev server (http://localhost:3000)
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Docker
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# From the repository root
+docker compose up --build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The frontend container serves via Nginx in production mode (see `nginx.conf`).
 
-## Learn More
+## Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Next.js development server |
+| `npm run build` | Create a production build |
+| `npm start` | Start the production server |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run Jest tests (single run) |
+| `npm run test:watch` | Run Jest tests in watch mode |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `NEXT_PUBLIC_API_URL` | No | `http://localhost:5000/api` | Backend API base URL |
 
-## Deploy on Vercel
+See [`.env.example`](.env.example) for a reference template.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tests are located in `src/__tests__/` and use Jest with `jest-environment-jsdom` and `@testing-library/react`.
+
+```bash
+npm test            # single run
+npm run test:watch  # watch mode
+```
