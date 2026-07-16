@@ -122,3 +122,6 @@ dist/
 .terraform/
 *.tfstate
 *.tfstate.backup
+
+# Vercel
+.vercel/

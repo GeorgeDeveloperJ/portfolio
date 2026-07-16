@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Project, Skill, Certification, fallbackProjects, fallbackSkills, fallbackCertifications } from '../lib/fallbackData';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_URL && typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
+    console.warn('[useApi] NEXT_PUBLIC_API_URL is not set. Using static fallback data only.');
+}
 
 export function usePortfolioData() {
     const [projects, setProjects] = useState<Project[]>([]);
@@ -16,7 +20,7 @@ export function usePortfolioData() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => {
             controller.abort();
-        }, 3000); // 3-second timeout fallback
+        }, 5000); // 5-second timeout fallback to accommodate backend cold starts
         
         async function fetchData() {
             if (!active) return;
