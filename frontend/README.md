@@ -79,7 +79,7 @@ The frontend container serves via Nginx in production mode (see `nginx.conf`).
 |---------|-------------|
 | `npm run dev` | Start Next.js development server |
 | `npm run build` | Create a production build |
-| `npm start` | Start the production server |
+| `npm start` | Start Next.js server (not used with static export) |
 | `npm run lint` | Run ESLint |
 | `npm test` | Run Jest tests (single run) |
 | `npm run test:watch` | Run Jest tests in watch mode |

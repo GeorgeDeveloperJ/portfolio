@@ -19,7 +19,7 @@ Built with a modern web architecture, this project features a containerized mult
 *   **Dual-Mode Interface**: A unique CLI terminal mode and a graphical dashboard mode — switch between them with the `gui` command.
 *   **Offline Fallback**: Automatically loads static cached data when the backend API is unreachable, ensuring the portfolio always renders.
 *   **Terminal / CRT Aesthetic**: Dark terminal-inspired UI built with Tailwind CSS, framer-motion animations, and lucide-react icons.
-*   **Containerized & Cloud Native**: Fully Dockerized multi-service stack (frontend, backend, PostgreSQL) with Nginx reverse proxy for production.
+*   **Containerized & Cloud Native**: Fully Dockerized multi-service stack (frontend, backend, PostgreSQL) with Nginx static file server for production.
 
 ---
 
