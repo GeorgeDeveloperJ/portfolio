@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Project, Skill, Certification, fallbackProjects, fallbackSkills, fallbackCertifications } from '../lib/fallbackData';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL = baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
 
 if (!API_URL && typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
     console.warn('[useApi] NEXT_PUBLIC_API_URL is not set. Using static fallback data only.');
