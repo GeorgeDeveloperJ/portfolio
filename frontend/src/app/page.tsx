@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { usePortfolioData } from "../hooks/useApi";
+import { usePortfolioData, useAuth } from "../hooks/useApi";
 import Console from "../components/Terminal/Console";
 import GuiView from "../components/GUI/GuiView";
 import { Terminal, LayoutGrid, AlertCircle, Wifi, WifiOff } from "lucide-react";
 
 export default function Home() {
-    const { projects, skills, certs, loading, logs, isFallback } = usePortfolioData();
+    const { projects, skills, certs, loading, logs, isFallback, refresh } = usePortfolioData();
+    const { adminToken, login, logout } = useAuth();
     const [viewMode, setViewMode] = useState<"cli" | "gui">("cli");
     const [progress, setProgress] = useState(0);
 
@@ -122,12 +123,19 @@ export default function Home() {
                             certs={certs}
                             isFallback={isFallback}
                             onSwitchToGui={() => setViewMode("gui")}
+                            adminToken={adminToken}
+                            login={login}
+                            logout={logout}
+                            refresh={refresh}
                         />
                     ) : (
                         <GuiView
                             projects={projects}
                             skills={skills}
                             certs={certs}
+                            adminToken={adminToken}
+                            refresh={refresh}
+                            logout={logout}
                         />
                     )}
                 </div>
