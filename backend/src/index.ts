@@ -6,6 +6,7 @@ import { AppDataSource } from './data-source';
 import projectsRouter from './routes/projects';
 import skillsRouter from './routes/skills';
 import certificationsRouter from './routes/certifications';
+import adminRouter from './routes/admin';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/projects', projectsRouter);
 app.use('/api/skills', skillsRouter);
 app.use('/api/certifications', certificationsRouter);
+app.use('/api/admin', adminRouter);
 
 if (process.env.NODE_ENV !== 'test') {
     AppDataSource.initialize()

@@ -16,9 +16,24 @@ export function useAuth() {
         if (stored) setAdminTokenState(stored);
     }, []);
 
-    const login = (token: string) => {
-        sessionStorage.setItem('admin_token', token);
-        setAdminTokenState(token);
+    const login = async (token: string) => {
+        try {
+            const res = await fetch(`${API_URL}/admin/verify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                sessionStorage.setItem('admin_token', token);
+                setAdminTokenState(token);
+                return true;
+            }
+        } catch (e) {
+            console.error("Login error:", e);
+        }
+        return false;
     };
 
     const logout = () => {

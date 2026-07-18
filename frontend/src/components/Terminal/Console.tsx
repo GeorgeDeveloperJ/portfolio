@@ -10,7 +10,7 @@ interface ConsoleProps {
     isFallback: boolean;
     onSwitchToGui: () => void;
     adminToken: string | null;
-    login: (token: string) => void;
+    login: (token: string) => Promise<boolean> | void | boolean;
     logout: () => void;
     refresh: () => void;
 }
@@ -39,11 +39,17 @@ export default function Console({ projects, skills, certs, isFallback, onSwitchT
     const promptColor = isRoot ? "text-red-500" : "text-term-accent";
 
     const asciiLogo = String.raw`
-   ______ ______ ____   ____   ______ ______   ______ ____   _   __ _____ ____   __     ___ 
-  / ____// ____// __ \ / __ \ / ____// ____/  / ____// __ \ / | / // ___// __ \ / /    /   |
- / / __ / __/  / / / // /_/ // / __ / __/    / /    / / / //  |/ / \___// / / // /    / /| |
-/ /_/ // /___ / /_/ // _, _// /_/ // /___   / /___ / /_/ // /|  / ____// / / //___   / ___ |
-\____//_____/ \____//_/ |_| \____//_____/   \____/ \____//_/ |_|/_____/\____//_____//_/  |_|
+   ________________  ____  _____________
+  / ____/ ____/ __ \/ __ \/ ____/ ____/
+ / / __/ __/ / / / / /_/ / / __/ __/   
+/ /_/ / /___/ /_/ / _, _/ /_/ / /___   
+\____/_____/\____/_/ |_|\____/_____/   
+                                       
+   __________  _   _______ ____  __    ______
+  / ____/ __ \/ | / / ___// __ \/ /   / ____/
+ / /   / / / /  |/ /\__ \/ / / / /   / __/   
+/ /___/ /_/ / /|  /___/ / /_/ / /___/ /___   
+\____/\____/_/ |_//____/\____/_____/_____/   
 `;
 
     useEffect(() => {
@@ -90,7 +96,7 @@ export default function Console({ projects, skills, certs, isFallback, onSwitchT
         if (e.key === "Enter") {
             const trimmedCmd = input.trim();
             if (isPromptingPassword) {
-                handlePasswordSubmit(trimmedCmd);
+                await handlePasswordSubmit(trimmedCmd);
             } else if (trimmedCmd) {
                 await executeCommand(trimmedCmd);
                 setCmdHistory(prev => [trimmedCmd, ...prev].slice(0, 50));
@@ -124,15 +130,23 @@ export default function Console({ projects, skills, certs, isFallback, onSwitchT
         }
     };
 
-    const handlePasswordSubmit = (pwd: string) => {
+    const handlePasswordSubmit = async (pwd: string) => {
         setIsPromptingPassword(false);
         if (pwd) {
-            login(pwd);
-            setHistory(prev => [...prev, {
-                id: `output-${Date.now()}`,
-                type: "output",
-                text: <p className="text-term-green">Authenticated as root.</p>
-            }]);
+            const success = await login(pwd);
+            if (success) {
+                setHistory(prev => [...prev, {
+                    id: `output-${Date.now()}`,
+                    type: "output",
+                    text: <p className="text-term-green">Authenticated as root.</p>
+                }]);
+            } else {
+                setHistory(prev => [...prev, {
+                    id: `output-${Date.now()}`,
+                    type: "output",
+                    text: <p className="text-term-red">su: Authentication failure</p>
+                }]);
+            }
         } else {
             setHistory(prev => [...prev, {
                 id: `output-${Date.now()}`,
@@ -195,6 +209,12 @@ export default function Console({ projects, skills, certs, isFallback, onSwitchT
                                 <span className="font-bold text-term-green">contact</span>
                                 <span className="col-span-3">Show email, GitHub, and links.</span>
                             </p>
+                            {!isRoot && (
+                                <p className="grid grid-cols-4 gap-4 max-w-lg">
+                                    <span className="font-bold text-term-green">sudo su</span>
+                                    <span className="col-span-3">Switch to superuser.</span>
+                                </p>
+                            )}
                             {isRoot && (
                                 <>
                                     <p className="text-red-500 mt-2">Admin Commands:</p>
